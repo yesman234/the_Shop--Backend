@@ -1,8 +1,10 @@
-const { error } = require("console");
-const express = require("express");
-const products = require("./data/products");
+import dotenv from 'dotenv';
+import express from 'express';
+import products from `./data/products.mjs`;
 
 const app = express();
+
+dotenv.config();
 
 //home
 app.get("/", (req, res, err) => {
@@ -28,5 +30,9 @@ app.get("/api/products/:id", (req, res, err) => {
 		res.send("path error");
 	}
 });
+const PORT = process.env.PORT || 5000;
 
-app.listen(5000, console.log("Server running on port 5000"));
+app.listen(
+	PORT,
+	console.log(`${process.env.NODE_ENV} server running on port ${PORT}`)
+);
