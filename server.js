@@ -1,9 +1,10 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import products from `./data/products.mjs`;
+import dotenv from "dotenv";
+import express from "express";
+import products from "./data/products.js";
+import connDB from "./config/db.js";
 
 const app = express();
-
+connDB();
 dotenv.config();
 
 //home
