@@ -18,16 +18,16 @@ const importData = async () => {
 		await Product.deleteMany();
 		await User.deleteMany();
 
-		const createdUsers = await User.insertMany(users);
+		const createdUsers = await User.insertMany(users); /// USER MODEL
 
 		const adminUser = createdUsers[0]._id;
 
 		const sampleProducts = products.map((product) => {
-			return { ...product, user: adminUser };
+			return { ...product, user: adminUser }; //// inserting this  from down stairs Product mngoose model
 		});
 
-		await Product.insertMany(sampleProducts);
-		console.log(`${sampleProducts}`);
+		await Product.insertMany(sampleProducts); //PRODUCT MODEL
+		console.log(sampleProducts);
 
 		console.log("Data Imported!".green.inverse);
 		process.exit();

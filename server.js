@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import products from "./data/products.js";
 import connDB from "./config/db.js";
 import colors from "colors";
+import productRoutes from "./routes/productRoutes.js";
 
 const app = express();
 
@@ -11,27 +11,12 @@ connDB();
 //home
 app.get("/", (req, res, err) => {
 	res.send("Api running");
-	if (error) {
-		res.send("path error");
+	if (err) {
+		res.send("path error" + err);
 	}
 });
+app.use("/api/products", productRoutes);
 
-//products
-app.get("/api/products", async (req, res, err) => {
-	const produxt = await products;
-	res.send(produxt);
-	if (error) {
-		res.send("path error");
-	}
-});
-app.get("/api/products/:id", (req, res, err) => {
-	const product = products.find((p) => p._id === req.params.id);
-	res.send(product);
-
-	if (error) {
-		res.send("path error");
-	}
-});
 const PORT = process.env.PORT || 5000;
 
 app.listen(
