@@ -1,8 +1,8 @@
 import express from "express";
-
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 const router = express.Router();
+
 //products
 // This will now be '/api/products' by default Hence name of file
 
@@ -11,12 +11,10 @@ const router = express.Router();
 //@access Public
 router.get(
 	"/",
-	asyncHandler(async (req, res, err) => {
-		const produxt = await Product.find({});
-		res.json(produxt);
-		if (err) {
-			res.send("path error" + err);
-		}
+	asyncHandler(async (req, res) => {
+		const products = await Product.find({});
+
+		res.json(products);
 	})
 );
 //@desc a single product
@@ -28,9 +26,9 @@ router.get(
 		const product = await Product.findById(req.params.id);
 
 		if (product) {
-			res.send(product);
+			res.json(product);
 		} else {
-			res.send("sorry charlie");
+			res.status(401).json({ message: "product not found" });
 		}
 	})
 );

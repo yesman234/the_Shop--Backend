@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connDB from "./config/db.js";
 import colors from "colors";
+import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import productRoutes from "./routes/productRoutes.js";
 
 const app = express();
@@ -16,12 +17,15 @@ app.get("/", (req, res, err) => {
 	}
 });
 app.use("/api/products", productRoutes);
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(
 	PORT,
 	console.log(
-		`${process.env.NODE_ENV} server running on port ${PORT}`.brightYellow.bold
+		`${process.env.NODE_ENV}+ this is it${process.env.URL} server running on port ${PORT}`
+			.brightYellow.bold
 	)
 );

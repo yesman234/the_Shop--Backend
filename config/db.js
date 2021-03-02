@@ -1,16 +1,21 @@
 import mongoose from "mongoose";
 
-const connDB = async () => {
+const connectDB = async () => {
 	try {
-		const url = process.env.MONGODB_URI;
-		const conn = await mongoose.connect(url, {
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			useCreateIndex: true
-		});
-		console.log(`Mongodb connected: ${conn.connection.host}`.brightGreen);
-	} catch (err) {
-		console.log(`${err}+ connection db error`.brightRed);
+		const conn = await mongoose.connect(
+			"mongodb+srv://Brad_Traverse:Garagec250@cluster0.o5kvx.mongodb.net/beaver?retryWrites=true&w=majority",
+			{
+				useUnifiedTopology: true,
+				useNewUrlParser: true,
+				useCreateIndex: true
+			}
+		);
+
+		console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline);
+	} catch (error) {
+		console.error(`Error: ${error.message}`.red.underline.bold);
+		process.exit(1);
 	}
 };
-export default connDB;
+
+export default connectDB;
