@@ -4,9 +4,10 @@ import connDB from "./config/db.js";
 import colors from "colors";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import productRoutes from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
-
+app.use(express.json);
 dotenv.config();
 connDB();
 //home
@@ -17,6 +18,8 @@ app.get("/", (req, res, err) => {
 	}
 });
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
+
 app.use(notFound);
 app.use(errorHandler);
 
