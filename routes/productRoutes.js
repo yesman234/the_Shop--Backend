@@ -1,8 +1,7 @@
 import express from "express";
-import {} from "express-async-handler";
-import products from "../data/products";
+import asyncHandler from "express-async-handler";
 const router = express.Router();
-import Product from "../models/productModel";
+import Product from "../models/productModel.js";
 //products
 // This will now be '/api/products' by default Hence name of file
 
