@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from 'helmet';
 import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
@@ -21,6 +22,7 @@ const corsOptions = {
 		}
 	}
 }
+app.use(helmet());
 app.use(cors(corsOptions))
 app.use(express.json());
 dotenv.config();
@@ -39,9 +41,9 @@ app.use(notFound);
 app.use(errorHandler);
 
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, 'the_Shop/build')));
+	app.use(express.static(path.join(__dirname, 'front-end/build')));
 	app.get('*', function (req, res) {
-		res.sendFile(path.join(__dirname, 'the_Shop/build', 'index.html'))
+		res.sendFile(path.join(__dirname, 'front-end/build', 'index.html'))
 	})
 }
 
