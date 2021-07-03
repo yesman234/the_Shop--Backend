@@ -3,13 +3,12 @@ import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
 import connDB from "./config/db.js";
-import colors from "colors";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
-const whiteList = ['http://localhost:3000', 'http://localhost:5000', 'https://vast-springs-61539.herokuapp.com/']
+const whiteList = ['http://localhost:3000', 'http://localhost:5000', 'https://arcane-temple-22586.herokuapp.com/']
 const corsOptions = {
 	origin: function (origin, callback) {
 		console.log("** origin requested " + origin)
