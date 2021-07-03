@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
+import cors from "cors";
 import connDB from "./config/db.js";
 import colors from "colors";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
@@ -7,6 +9,20 @@ import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
+const whiteList = ['http://localhost:3000', 'http://localhost:5000', 'https://vast-springs-61539.herokuapp.com/']
+const corsOptions = {
+	origin: function (origin, callback) {
+		console.log("** origin requested " + origin)
+		if (whiteList.indexOf(origin) !== -1 || origin) {
+			console.log("origin acceptable")
+			callback(null, true)
+		} else {
+			console.log("Origin rejected")
+			callback(new Error('Not allowed by cors'))
+		}
+	}
+}
+app.use(cors(corsOptions))
 app.use(express.json());
 dotenv.config();
 connDB();
@@ -22,6 +38,13 @@ app.use("/api/users", userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, 'the_Shop/build')));
+	app.get('*', function (req, res) {
+		res.sendFile(path.join(__dirname, 'the_Shop/build', 'index.html'))
+	})
+}
 
 const PORT = process.env.PORT || 5000;
 

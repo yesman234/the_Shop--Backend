@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
+
 const connectDB = async () => {
 	try {
 		const conn = await mongoose.connect(
-			"mongodb+srv://Brad_Traverse:Garagec250@cluster0.o5kvx.mongodb.net/beaver?retryWrites=true&w=majority",
+			process.env.MONGO_URI,
 			{
 				useUnifiedTopology: true,
 				useNewUrlParser: true,
