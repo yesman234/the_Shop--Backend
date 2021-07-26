@@ -1,58 +1,51 @@
-import express from "express";
-import helmet from 'helmet';
-import dotenv from "dotenv";
-import path from "path";
-import cors from "cors";
-import connDB from "./config/db.js";
-import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-import productRoutes from "./routes/productRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import path from 'path'
+import express from 'express'
+import dotenv from 'dotenv'
+import colors from "colors";
+import morgan from 'morgan'
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
+import connectDB from './config/db.js'
+import productRoutes from './routes/productRoutes.js'
+import userRoutes from './routes/userRoutes.js'
+//import orderRoutes from './routes/orderRoutes.js'
+//import uploadRoutes from './routes/uploadRoutes.js'
 
-const app = express();
-const whiteList = ['http://localhost:3000', 'http://localhost:5000', 'https://arcane-temple-22586.herokuapp.com/']
-const corsOptions = {
-	origin: function (origin, callback) {
-		console.log("** origin requested " + origin)
-		if (whiteList.indexOf(origin) !== -1 || origin) {
-			console.log("origin acceptable")
-			callback(null, true)
-		} else {
-			console.log("Origin rejected")
-			callback(new Error('Not allowed by cors'))
-		}
-	}
+dotenv.config()
+
+connectDB()
+const __dirname = path.resolve();
+const app = express()
+
+if (process.env.NODE_ENV === 'development') {
+	app.use(morgan('dev'))
 }
-app.use(helmet());
-app.use(cors(corsOptions))
-app.use(express.json());
-dotenv.config();
-connDB();
-//home
-app.get("/", (req, res, err) => {
-	res.send("Api running");
-	if (err) {
-		res.send("path error" + err);
-	}
-});
-app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes);
 
-app.use(notFound);
-app.use(errorHandler);
+app.use(express.json())
+
+app.use('/api/products', productRoutes)
+app.use('/api/users', userRoutes)
+
 
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, 'front-end/build')));
-	app.get('*', function (req, res) {
-		res.sendFile(path.join(__dirname, 'front-end/build', 'index.html'))
+	app.use(express.static(path.join(__dirname, '/the_Shop/build')))
+
+	app.get('*', (req, res) =>
+		res.sendFile(path.resolve(__dirname, 'the_Shop', 'build', 'index.html'))
+	)
+} else {
+	app.get('/', (req, res) => {
+		res.send('API is running....')
 	})
 }
 
-const PORT = process.env.PORT || 5000;
+app.use(notFound)
+app.use(errorHandler)
+
+const PORT = process.env.PORT || 5000
 
 app.listen(
 	PORT,
 	console.log(
-		`${process.env.NODE_ENV} + this is it${process.env.URL} server running on port ${PORT}`
-			.brightYellow.bold
+		`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
 	)
-);
+)
